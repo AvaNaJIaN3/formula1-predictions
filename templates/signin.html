@@ -1,0 +1,264 @@
+{% extends 'navigator.html' %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+<div class="signin-container">
+  <div class="signin-wrapper">
+    <div class="signin-image">
+      <img src="static/img/SigIn.jpeg" alt="F1 Car">
+      <div class="image-overlay"></div>
+    </div>
+
+    <div class="signin-form-container">
+      <div class="form-header">
+        <h2>Create Account</h2>
+        <p>Join our F1 community today</p>
+      </div>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+          <div class="{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endwith %}
+
+      <form class="signin-form" method="POST" action="#">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+          {{form.name.label}}
+          <div class="input-wrapper">
+            <i class="fas fa-user"></i>
+            {{ form.name(placeholder="Name") }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          {{ form.email.label }}
+          <div class="input-wrapper">
+            <i class="fas fa-envelope"></i>
+            {{ form.email(placeholder="Enter your email") }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          {{ form.password.label }}
+          <div class="input-wrapper">
+            <i class="fas fa-lock"></i>
+            {{ form.password(placeholder='Enter your password') }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          {{ form.confirm_password.label }}
+          <div class="input-wrapper">
+            <i class="fas fa-lock"></i>
+            {{ form.confirm_password(placeholder="Confirm your password") }}
+          </div>
+        </div>
+
+        <div class="form-options">
+          <label class="terms">
+            <input type="checkbox" name="terms" required>
+            <span>I agree to the <a href="#">Terms & Conditions</a></span>
+          </label>
+        </div>
+
+        {{ form.submit(class="signin-btn") }}
+
+        <div class="login-link">
+          <p>Already have an account? <a href="/login">Log in</a></p>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<style>
+  :root {
+    --f1-red: #e10600;
+    --f1-dark: #15151e;
+    --input-bg: #f8f9fa;
+    --text-color: #333;
+  }
+
+  .signin-container {
+    min-height: calc(100vh - 80px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    margin-top: 80px;
+    background-color: #fff;
+  }
+
+  .signin-wrapper {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  }
+
+  .signin-image {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .signin-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(225,6,0,0.8), rgba(21,21,30,0.8));
+  }
+
+  .signin-form-container {
+    flex: 1;
+    padding: 60px;
+    background: white;
+  }
+
+  .form-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .form-header h2 {
+    font-size: 32px;
+    color: var(--f1-dark);
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+
+  .form-header p {
+    color: #666;
+    font-size: 16px;
+  }
+
+  .form-group {
+    margin-bottom: 25px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-color);
+    font-weight: 500;
+  }
+
+  .input-wrapper {
+    position: relative;
+  }
+
+  .input-wrapper i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+  }
+  .error {
+    text-align: center;
+    font-size: 16px;
+    font-weight : bold;
+    color:red;
+  }
+
+  .input-wrapper input {
+    width: 100%;
+    padding: 15px 15px 15px 45px;
+    border: 2px solid var(--input-bg);
+    border-radius: 12px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background: var(--input-bg);
+  }
+
+  .input-wrapper input:focus {
+    border-color: var(--f1-red);
+    outline: none;
+    background: white;
+  }
+
+  .form-options {
+    margin-bottom: 30px;
+  }
+
+  .terms {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #666;
+    cursor: pointer;
+  }
+
+  .terms a {
+    color: var(--f1-red);
+    text-decoration: none;
+  }
+
+  .terms a:hover {
+    text-decoration: underline;
+  }
+
+  .signin-btn {
+    width: 100%;
+    padding: 15px;
+    background: var(--f1-red);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .signin-btn:hover {
+    background: var(--f1-dark);
+    transform: translateY(-2px);
+  }
+
+  .login-link {
+    text-align: center;
+    margin-top: 30px;
+    color: #666;
+  }
+
+  .login-link a {
+    color: var(--f1-red);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .login-link a:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 992px) {
+    .signin-image {
+      display: none;
+    }
+
+    .signin-form-container {
+      padding: 40px;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .signin-form-container {
+      padding: 30px 20px;
+    }
+  }
+</style>
+{% endblock %} 

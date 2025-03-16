@@ -1,0 +1,467 @@
+{% extends 'navigator.html' %}
+
+{% block title %}{{ racer.name }} {{ racer.surname }}{% endblock %}
+
+{% block content %}
+<div class="driver-profile">
+  <div class="profile-container">
+    <!-- Ліва частина з фото -->
+    <div class="driver-image">
+      {% if racer.img %}
+        <img 
+          src="/{{ racer.img }}" 
+          alt="{{ racer.name }} {{ racer.surname }}"
+          onerror="console.log('Error loading image:', this.src);"
+        >
+      {% else %}
+        <p>No image available</p>
+      {% endif %}
+    </div>
+
+    <!-- Права частина з інформацією -->
+    <div class="driver-info">
+      <h1>{{ racer.name }} {{ racer.surname }}</h1>
+      
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="label">Age</span>
+          <span class="value">{{ racer.age }}</span>
+        </div>
+        
+        <div class="info-item">
+          <span class="label">Team</span>
+          <span class="value">{{ racer.team }}</span>
+        </div>
+        
+        <div class="info-item">
+          <span class="label">Points</span>
+          <span class="value">{{ racer.points }}</span>
+        </div>
+        
+        <div class="info-item">
+          <span class="label">Country</span>
+          <span class="value">{{ racer.country }}</span>
+        </div>
+        
+        <div class="info-item">
+          <span class="label">Podiums</span>
+          <span class="value">{{ racer.podiums }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Championships</span>
+          <span class="value">{{ racer.championships }}</span>
+        </div>
+        
+        <div class="info-item">
+          <span class="label">Career Points</span>
+          <span class="value">{{ racer.max_points }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Додаємо нову секцію для кнопки -->
+  {% if current_user.favourite_driver != driver_name : %}
+    {% if current_user.is_authenticated %}
+        <div class="favorite-section">
+          <a href="{{ url_for('set_driver', driver_id=racer.id, user_id=current_user.id) }}" class="favorite-btn">
+            <i class="fas fa-star"></i> Set as my favourite driver
+          </a>
+        </div>
+    {% endif %}
+  {% else %}
+    <div class="favorite-section">
+      <span class="favorite-btn current-favorite">
+        <i class="fas fa-star"></i> It`s Favourite Driver
+      </span>
+    </div>
+  {% endif %}
+
+  <!-- Біографія -->
+  <div class="biography-section">
+    <h2>Biography</h2>
+    <div class="biography-content">
+      {{ racer.bio }}
+    </div>
+  </div>
+
+  <!-- Додайте цей блок після біографії -->
+  <div class="race-results-section">
+    <h2>Race Results - last three races</h2>
+    <div class="race-results-grid">
+        {% for result in racer.results[-3:] %}
+        <a href="{{ url_for('race', race_id=result.race.id) }}" class="race-result-link">
+            <div class="race-result-card">
+                <div class="race-info">
+                    <div class="race-name">{{ result.race.name}}</div>
+                    <div class="race-date">{{ result.race.date}}</div>
+                </div>
+                <div class="result-details">
+                    <div class="position">
+                        <span class="position-number">{{ result.place}}</span>
+                        <span class="position-label">Position</span>
+                    </div>
+                    <div class="points">
+                        <span class="points-number">{{ result.points}}</span>
+                        <span class="points-label">Points</span>
+                    </div>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+  </div>
+</div>
+
+<style>
+  .driver-profile {
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 100px auto 40px;
+    background-color: #f5f5f5;
+    border-radius: 20px;
+  }
+
+  .profile-container {
+    display: flex;
+    gap: 50px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    overflow: hidden;
+    margin-bottom: 40px;
+    min-height: 600px;
+  }
+
+  .driver-image {
+    flex: 0 0 40%;
+    position: relative;
+    overflow: hidden;
+    min-height: 600px;
+  }
+
+  .driver-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    position: relative;
+  }
+
+  .driver-image:hover img {
+    transform: scale(1.05);
+  }
+
+  .driver-info {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .driver-info h1 {
+    font-size: 2.5rem;
+    color: var(--f1-dark);
+    margin-bottom: 30px;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-bottom: 3px solid var(--f1-red);
+    padding-bottom: 10px;
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+  }
+
+  .info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+  }
+
+  .info-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
+
+  .label {
+    font-size: 0.9rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .value {
+    font-size: 1.2rem;
+    color: var(--f1-dark);
+    font-weight: 500;
+  }
+
+  .biography-section {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  }
+
+  .biography-section h2 {
+    font-size: 2rem;
+    color: var(--f1-dark);
+    margin-bottom: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-bottom: 3px solid var(--f1-red);
+    padding-bottom: 10px;
+  }
+
+  .biography-content {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #444;
+    white-space: pre-line;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+  }
+
+  .favorite-section {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .favorite-btn {
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    background: var(--f1-red);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 15px rgba(225,6,0,0.3);
+    text-decoration: none;
+  }
+
+  .favorite-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(225,6,0,0.4);
+    background: #ff1a1a;
+  }
+
+  .favorite-btn i {
+    font-size: 1.2rem;
+  }
+
+  .favorite-btn.current-favorite {
+    background: #1e824c;
+    cursor: default;
+    border: 2px solid #145a35;
+    padding: 13px 28px;
+    font-weight: bold;
+    letter-spacing: 1px;
+  }
+
+  .favorite-btn.current-favorite:hover {
+    transform: none;
+    box-shadow: 0 4px 15px rgba(30, 130, 76, 0.3);
+    background: #1e824c;
+  }
+
+  .favorite-btn.current-favorite i {
+    color: #ffd700;
+    animation: star-pulse 2s infinite;
+  }
+
+  @keyframes star-pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+  }
+
+  /* Адаптивність */
+  @media (max-width: 992px) {
+    .profile-container {
+      flex-direction: column;
+      min-height: auto;
+    }
+
+    .driver-image {
+      min-height: 400px;
+    }
+
+    .driver-image img {
+      position: relative;
+    }
+
+    .info-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .info-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .driver-profile {
+      padding: 20px 10px;
+      margin: 80px auto 20px;
+    }
+
+    .driver-image {
+      min-height: 300px;
+    }
+
+    .driver-info {
+      padding: 20px;
+    }
+
+    .driver-info h1 {
+      font-size: 2rem;
+    }
+
+    .biography-section {
+      padding: 20px;
+    }
+
+    .favorite-btn {
+      padding: 12px 25px;
+      font-size: 1rem;
+    }
+  }
+
+  .race-results-section {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    margin-top: 40px;
+  }
+
+  .race-results-section h2 {
+    font-size: 2rem;
+    color: var(--f1-dark);
+    margin-bottom: 30px;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-bottom: 3px solid var(--f1-red);
+    padding-bottom: 10px;
+  }
+
+  .race-results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+
+  .race-result-card {
+    background: #f8f9fa;
+    border-radius: 15px;
+    padding: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .race-result-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
+
+  .race-info {
+    margin-bottom: 15px;
+  }
+
+  .race-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--f1-dark);
+    margin-bottom: 5px;
+  }
+
+  .race-date {
+    font-size: 0.9rem;
+    color: #666;
+  }
+
+  .result-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 15px;
+    border-top: 1px solid #ddd;
+  }
+
+  .position, .points {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .position-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--f1-dark);
+  }
+
+  .points-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--f1-red);
+  }
+
+  .position-label, .points-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: #666;
+    letter-spacing: 1px;
+  }
+
+  /* Стилі для першої позиції */
+  .race-result-card[data-position="1"] {
+    background: linear-gradient(135deg, #ffd700 0%, #fff7cc 100%);
+  }
+
+  /* Стилі для другої позиції */
+  .race-result-card[data-position="2"] {
+    background: linear-gradient(135deg, #c0c0c0 0%, #f5f5f5 100%);
+  }
+
+  /* Стилі для третьої позиції */
+  .race-result-card[data-position="3"] {
+    background: linear-gradient(135deg, #cd7f32 0%, #ffdcb5 100%);
+  }
+
+  @media (max-width: 768px) {
+    .race-results-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .race-results-section {
+      padding: 20px;
+    }
+  }
+
+  .race-result-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .race-result-link:hover {
+    text-decoration: none;
+    color: inherit;
+  }
+</style>
+{% endblock %} 

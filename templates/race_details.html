@@ -1,0 +1,401 @@
+{% extends "navigator.html" %}
+{% block title %} {{race.name}} {% endblock %}
+{% block content %}
+<div class="container">
+    <div class="race-details-wrapper">
+        <!-- Інформація про гонку -->
+        <div class="race-header">
+            <div class="race-info">
+                <div class="race-date">{{ race.date }}</div>
+                <h1 class="race-name">{{ race.name }}</h1>
+                <div class="race-location">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>{{ race.location }}</span>
+                </div>
+            </div>
+        </div>
+
+        {% if race.race_results %}
+            <!-- Podiums -->
+            <div class="podium-section">
+                <h2>Podium</h2>
+                <div class="podium-wrapper">
+                    <!-- Second place -->
+                    <div class="podium-place second">
+                        <div class="driver-photo">
+                            <img
+                                src="/{{ results[1].driver.img }}"
+                                alt="{{ results[1].driver.name }} {{ results[1].driver.surname }}"
+                                onerror="console.log('Error loading image:', this.src);"
+                            >
+                        </div>
+                        <div class="position-number">2</div>
+                        <div class="driver-info">
+                            <div class="driver-name">{{ results[1].driver.name }}</div>
+                            <div class="driver-team">{{ results[1].driver.team }}</div>
+                            <div class="driver-points">{{ results[1].points }} pts</div>
+                        </div>
+                    </div>
+
+                    <!-- First place -->
+                    <div class="podium-place first">
+                        <div class="driver-photo">
+                            <img
+                                src="/{{ results[0].driver.img }}"
+                                alt="{{ results[0].driver.name }} {{ results[0].driver.surname }}"
+                                onerror="console.log('Error loading image:', this.src);"
+                            >
+                        </div>
+                        <div class="position-number">1</div>
+                        <div class="driver-info">
+                            <div class="driver-name">{{ results[0].driver.name }}</div>
+                            <div class="driver-team">{{ results[0].driver.team }}</div>
+                            <div class="driver-points">{{ results[0].points }} pts</div>
+                        </div>
+                    </div>
+
+                    <!-- Тhird place -->
+                    <div class="podium-place third">
+                        <div class="driver-photo">
+                            <img
+                                src="/{{ results[2].driver.img }}"
+                                alt="{{ results[2].driver.name }} {{ results[2].driver.surname }}"
+                                onerror="console.log('Error loading image:', this.src);"
+                            >
+                        </div>
+                        <div class="position-number">3</div>
+                        <div class="driver-info">
+                            <div class="driver-name">{{ results[2].driver.name }}</div>
+                            <div class="driver-team">{{ results[2].driver.team }}</div>
+                            <div class="driver-points">{{ results[2].points }} pts</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table of the results -->
+            <div class="results-section">
+                <h2>Rest of the grid</h2>
+                <div class="results-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Position</th>
+                                <th>Driver</th>
+                                <th>Team</th>
+                                <th>Points</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for result in results[3:] %}
+                            <tr>
+                                <td class="position">{{ result.place }}</td>
+                                <td class="driver">{{ result.driver.name }} {{result.driver.surname}}</td>
+                                <td class="team">{{ result.driver.team }}</td>
+                                <td class="points">{{ result.points }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% else %}
+            <div class="no-results">
+                <div class="no-results-content">
+                    <i class="fas fa-flag-checkered"></i>
+                    <h2>Not finished yet</h2>
+                    <p>Results will be available when the race is over</p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .race-details-wrapper {
+        padding: 20px;
+        margin-top: 70px;
+    }
+
+    .race-header {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .race-info {
+        text-align: center;
+    }
+
+    .race-date {
+        background: var(--f1-red);
+        color: white;
+        padding: 8px 20px;
+        border-radius: 25px;
+        font-size: 1.1em;
+        font-weight: 500;
+        display: inline-block;
+        margin-bottom: 15px;
+    }
+
+    .race-name {
+        font-size: 2.5em;
+        color: var(--f1-dark);
+        margin-bottom: 15px;
+    }
+
+    .race-location {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        color: var(--f1-gray);
+        font-size: 1.2em;
+    }
+
+    .race-location i {
+        color: var(--f1-red);
+    }
+
+    .results-section {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .results-section h2 {
+        color: var(--f1-dark);
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 2em;
+    }
+
+    .results-table {
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+
+    th {
+        background: var(--f1-dark);
+        color: white;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    th:first-child {
+        border-radius: 10px 0 0 0;
+    }
+
+    th:last-child {
+        border-radius: 0 10px 0 0;
+    }
+
+    tr:hover {
+        background: #f8f9fa;
+    }
+
+    .position {
+        font-weight: bold;
+        color: var(--f1-dark);
+    }
+
+    tr:first-child .position {
+        color: var(--f1-red);
+    }
+
+    .driver {
+        font-weight: 500;
+    }
+
+    .team {
+        color: var(--f1-gray);
+    }
+
+    .points {
+        font-weight: bold;
+        color: var(--f1-red);
+    }
+
+    @media (max-width: 768px) {
+        .race-name {
+            font-size: 2em;
+        }
+
+        .results-table {
+            margin: 0 -15px;
+        }
+
+        th, td {
+            padding: 10px;
+        }
+    }
+
+    .podium-section {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .podium-section h2 {
+        text-align: center;
+        color: var(--f1-dark);
+        margin-bottom: 30px;
+        font-size: 2em;
+    }
+
+    .podium-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        gap: 20px;
+        padding: 20px 0;
+    }
+
+    .podium-place {
+        text-align: center;
+        transition: transform 0.3s ease;
+    }
+
+    .podium-place:hover {
+        transform: translateY(-10px);
+    }
+
+    .driver-photo {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin: 0 auto 15px;
+        border: 4px solid;
+    }
+
+    .first .driver-photo {
+        width: 250px;
+        height: 250px;
+        border-color: gold;
+    }
+
+    .second .driver-photo {
+        border-color: silver;
+    }
+
+    .third .driver-photo {
+        border-color: #cd7f32;
+    }
+
+    .driver-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .position-number {
+        font-size: 2.5em;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .first .position-number {
+        color: gold;
+    }
+
+    .second .position-number {
+        color: silver;
+    }
+
+    .third .position-number {
+        color: #cd7f32;
+    }
+
+    .driver-info {
+        background: var(--f1-dark);
+        color: white;
+        padding: 15px;
+        border-radius: 10px;
+    }
+
+    .driver-name {
+        font-size: 1.2em;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .driver-team {
+        color: #aaa;
+        font-size: 0.9em;
+        margin-bottom: 5px;
+    }
+
+    .driver-points {
+        color: var(--f1-red);
+        font-weight: bold;
+    }
+
+    @media (max-width: 768px) {
+        .podium-wrapper {
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .podium-place {
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .first .driver-photo,
+        .second .driver-photo,
+        .third .driver-photo {
+            width: 200px;
+            height: 200px;
+        }
+    }
+
+    .no-results {
+        background: white;
+        border-radius: 15px;
+        padding: 50px 30px;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        margin-top: 30px;
+    }
+
+    .no-results-content {
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    .no-results i {
+        font-size: 4em;
+        color: var(--f1-red);
+        margin-bottom: 20px;
+    }
+
+    .no-results h2 {
+        color: var(--f1-dark);
+        font-size: 2em;
+        margin-bottom: 15px;
+    }
+
+    .no-results p {
+        color: var(--f1-gray);
+        font-size: 1.1em;
+    }
+</style>
+{% endblock %} 

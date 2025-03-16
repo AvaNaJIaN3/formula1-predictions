@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Base Title{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --f1-red: #e10600;
+      --f1-dark: #15151e;
+      --f1-gray: #38383f;
+    }
+
+    /* Стилі для навігаційної панелі */
+    .navbar {
+      background: linear-gradient(to right, var(--f1-dark), var(--f1-gray));
+      padding: 15px 0;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      transition: all 0.3s ease;
+      height: 70px; /* Фіксована висота */
+    }
+
+    .navbar.scrolled {
+      background: rgba(21, 21, 30, 0.95);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-brand {
+      padding: 0;
+      margin-right: 40px;
+      height: 40px; /* Фіксована висота для логотипу */
+      display: flex;
+      align-items: center;
+    }
+
+    .brand-text {
+      font-family: 'Titillium Web', sans-serif;
+      font-weight: 900;
+      font-size: 28px;
+      color: white;
+      letter-spacing: -1px;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .brand-number {
+      color: var(--f1-red);
+      margin-left: 2px;
+    }
+
+    .navbar-brand:hover .brand-text {
+      transform: scale(1.05);
+      text-shadow: 0 0 15px rgba(225, 6, 0, 0.3);
+    }
+
+    .navbar-nav {
+      gap: 10px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-item {
+      position: relative;
+    }
+
+    .nav-link {
+      color: white !important;
+      font-weight: 500;
+      font-size: 16px;
+      padding: 8px 16px !important;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 2px;
+      background: var(--f1-red);
+      transition: all 0.3s ease;
+      transform: translateX(-50%);
+    }
+
+    .nav-link:hover::after,
+    .nav-link.active::after {
+      width: 100%;
+    }
+
+    .nav-link:hover {
+      color: var(--f1-red) !important;
+    }
+
+    /* Стилі для кнопок */
+    .auth-buttons {
+      display: flex;
+      gap: 15px;
+      margin-left: auto;
+    }
+
+    .btn {
+      padding: 8px 24px;
+      border-radius: 25px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-size: 14px;
+    }
+
+    .btn-login {
+      background: transparent;
+      color: white;
+      border: 2px solid var(--f1-red);
+    }
+
+    .btn-login:hover {
+      background: var(--f1-red);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .btn-signin {
+      background: var(--f1-red);
+      color: white;
+      border: 2px solid var(--f1-red);
+    }
+
+    .btn-signin:hover {
+      background: #ff1801;
+      border-color: #ff1801;
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(225, 6, 0, 0.3);
+    }
+
+    /* Стилі для футера */
+    .footer {
+      background: var(--f1-dark);
+      color: white;
+      padding: 60px 0 30px;
+      margin-top: auto;
+    }
+
+    .footer-main {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer-section h3 {
+      color: var(--f1-red);
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .footer-section ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .footer-section ul li {
+      margin-bottom: 12px;
+    }
+
+    .footer-section ul a {
+      color: #ffffff;
+      text-decoration: none;
+      transition: color 0.3s ease;
+      font-size: 14px;
+      opacity: 0.8;
+    }
+
+    .footer-section ul a:hover {
+      color: var(--f1-red);
+      opacity: 1;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+    }
+
+    .footer-partners {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .footer-partners span {
+      opacity: 0.7;
+    }
+
+    .footer-partners img {
+      height: 30px;
+      width: auto;
+      opacity: 0.7;
+      transition: opacity 0.3s ease;
+    }
+
+    .footer-partners img:hover {
+      opacity: 1;
+    }
+
+    /* Адаптивність */
+    @media (max-width: 992px) {
+      .footer-main {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 576px) {
+      .footer-main {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+      }
+
+      .disclaimer {
+        padding: 10px;
+      }
+
+      .footer-partners {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    }
+
+    .disclaimer {
+      width: 100%;
+      text-align: center;
+      margin-bottom: 20px;
+      padding: 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .disclaimer-text {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .copyright {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="/">
+        <span class="brand-text">FORMULA<span class="brand-number">1</span></span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('races') }}">Races</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('drivers') }}">Drivers</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('teams') }}">Teams</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+          </li>
+           {% if current_user.is_authenticated %}
+              <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('predictions') }}">Predictions</a>
+              </li>
+          {% endif %}
+        </ul>
+        {% if not current_user.is_authenticated %}
+        <div class="auth-buttons">
+          <a href="{{ url_for('login') }}" class="btn btn-login">Log In</a>
+          <a href="{{ url_for('register') }}" class="btn btn-signin">Sign In</a>
+        </div>
+        {% else %}
+        <div class="auth-buttons">
+          <a href="{{ url_for('profile', id=current_user.id) }}" class="btn btn-login">Profile</a>
+          <a href="{{ url_for('logout') }}" class="btn btn-login">Logout</a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  {% block content %}{% endblock %}
+
+  <footer class="footer">
+    <div class="container">
+      <div class="disclaimer">
+        <p class="disclaimer-text">
+          This is an educational project and is not affiliated with Formula 1 or any of its partners.
+          This website is unofficial and is not associated in any way with the Formula 1 companies. F1, FORMULA ONE, FORMULA 1, FIA FORMULA ONE WORLD CHAMPIONSHIP, GRAND PRIX and related marks are trade marks of Formula One Licensing B.V
+          All trademarks are property of their respective owners.
+        </p>
+      </div>
+      <div class="footer-main">
+        <div class="footer-section">
+          <h3>About</h3>
+          <ul>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Terms of Use</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Racing</h3>
+          <ul>
+            <li><a href="{{ url_for('races') }}">Schedule</a></li>
+            <li><a href="{{ url_for('races') }}">Results</a></li>
+            <li><a href="{{ url_for('drivers') }}">Standings</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Teams & Drivers</h3>
+          <ul>
+            <li><a href="{{ url_for('teams') }}">Teams</a></li>
+            <li><a href="{{ url_for('drivers') }}">Drivers</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Follow Us</h3>
+          <ul>
+            <li><a href="#"><i class="fab fa-facebook"></i> Facebook</a></li>
+            <li><a href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
+            <li><a href="#"><i class="fab fa-instagram"></i> Instagram</a></li>
+            <li><a href="#"><i class="fab fa-youtube"></i> YouTube</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="copyright">
+          © 2024 F1 Educational Project. All rights reserved.
+        </div>
+        <div class="footer-partners">
+          <span>Our Partners:</span>
+          <img src="partner1.png" alt="Partner 1">
+          <img src="partner2.png" alt="Partner 2">
+          <img src="partner3.png" alt="Partner 3">
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Додавання класу при прокручуванні
+    window.addEventListener('scroll', function() {
+      const navbar = document.querySelector('.navbar');
+      if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+  </script>
+</body>
+</html>
+
+

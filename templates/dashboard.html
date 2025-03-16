@@ -1,0 +1,398 @@
+{% extends "navigator.html" %}
+
+{% block content %}
+<div class="dashboard-container">
+    <h1 class="dashboard-title animate-title">Championship Standings 2025</h1>
+    <p class="dashboard-subtitle animate-subtitle">Season Predictions Leaderboard</p>
+
+    <div class="podium-container">
+        <!-- Second Place -->
+        <div class="podium-card second-place animate-podium">
+            <div class="avatar-container">
+                <div class="avatar">
+                    <!-- Removed img tag - now using CSS :before with F1 car emoji -->
+                </div>
+            </div>
+            <div class="position">2nd</div>
+            <div class="user-name">
+                {% if users|length > 1 %}
+                {{ users[1].name }}
+                {% else %}
+                -
+                {% endif %}
+            </div>
+            <div class="points">
+                {% if users|length > 1 %}
+                {{ users[1].points }} pts
+                {% else %}
+                0 pts
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- First Place -->
+        <div class="podium-card first-place animate-podium" style="animation-delay: 0.2s;">
+            <div class="avatar-container">
+                <div class="avatar">
+                    <!-- Removed img tag - now using CSS :before with F1 car emoji -->
+                </div>
+            </div>
+            <div class="position">1st</div>
+            <div class="user-name">
+                {% if users|length > 0 %}
+                {{ users[0].name }}
+                {% else %}
+                -
+                {% endif %}
+            </div>
+            <div class="points">
+                {% if users|length > 0 %}
+                {{ users[0].points }} pts
+                {% else %}
+                0 pts
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Third Place -->
+        <div class="podium-card third-place animate-podium" style="animation-delay: 0.4s;">
+            <div class="avatar-container">
+                <div class="avatar">
+                    <!-- Removed img tag - now using CSS :before with F1 car emoji -->
+                </div>
+            </div>
+            <div class="position">3rd</div>
+            <div class="user-name">
+                {% if users|length > 2 %}
+                {{ users[2].name }}
+                {% else %}
+                -
+                {% endif %}
+            </div>
+            <div class="points">
+                {% if users|length > 2 %}
+                {{ users[2].points }} pts
+                {% else %}
+                0 pts
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="leaderboard-table animate-fade-in">
+        <div class="table-header">
+            <div class="header-position">Pos</div>
+            <div class="header-user">User</div>
+            <div class="header-points">Points</div>
+        </div>
+        
+        {% for user in users[3:] %}
+        <div class="table-row">
+            <div class="position">{{ loop.index + 3 }}</div>
+            <div class="user">
+                <div class="user-content">
+                    <span class="car-icon">🏎️</span>
+                    <span class="username">{{ user.name }}</span>
+                </div>
+            </div>
+            <div class="points">{{ user.points }}</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+    }
+
+    .f1-title {
+        text-align: center;
+        font-size: 48px;
+        font-weight: 900;
+        color: #e10600;
+        margin-bottom: 10px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    .dashboard-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        margin-top: 40px;
+    }
+
+    .dashboard-title {
+        text-align: center;
+        font-size: 48px;
+        font-weight: 900;
+        color: #e10600;
+        margin-bottom: 10px;
+        margin-top: 30px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+
+    .dashboard-subtitle {
+        text-align: center;
+        font-size: 18px;
+        color: #666;
+        margin-top: 5px;
+        margin-bottom: 40px;
+        font-weight: 500;
+        font-style: italic;
+    }
+
+    .podium-container {
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        margin-bottom: 40px;
+    }
+
+    .podium-card {
+        border-radius: 8px;
+        padding: 20px;
+        color: white;
+        text-align: center;
+        margin: 0 10px;
+        width: 200px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    /* Gold effect for first place */
+    .first-place {
+        height: 280px;
+        z-index: 3;
+        background: linear-gradient(135deg, #ffd700 0%, #f9ca24 40%, #f0c419 60%, #ffed8a 100%);
+        color: #333;
+        box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+    }
+    
+    /* Silver effect for second place */
+    .second-place {
+        height: 260px;
+        background: linear-gradient(135deg, #bec3c9 0%, #d7d7d7 40%, #e8e8e8 60%, #c0c0c0 100%);
+        color: #333;
+        box-shadow: 0 5px 15px rgba(192, 192, 192, 0.3);
+    }
+    
+    /* Bronze effect for third place */
+    .third-place {
+        height: 260px;
+        background: linear-gradient(135deg, #cd7f32 0%, #d5844a 40%, #e9967a 60%, #cd7f32 100%);
+        color: #333;
+        box-shadow: 0 5px 15px rgba(205, 127, 50, 0.3);
+    }
+    
+    /* Hover effects for podium cards */
+    .podium-card:hover {
+        transform: translateY(-8px) scale(1.03);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+    }
+
+    .avatar-container {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 15px;
+    }
+
+    .avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        overflow: hidden;
+        background-color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+        border: 3px solid white;
+        position: relative;
+    }
+
+    .first-place .avatar {
+        width: 100px;
+        height: 100px;
+    }
+
+    /* F1 Car icon styling */
+    .avatar:before {
+        content: '🏎️';
+        font-size: 40px;
+        line-height: 1;
+    }
+
+    .first-place .avatar:before {
+        font-size: 50px;
+    }
+
+    .position {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    .first-place .position {
+        font-size: 28px;
+    }
+
+    .user-name {
+        margin-bottom: 5px;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .first-place .user-name {
+        font-size: 18px;
+    }
+
+    .points {
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    .first-place .points {
+        font-size: 22px;
+    }
+
+    /* COMPLETE RESET - New table styles */
+    .leaderboard-table {
+        width: 100%;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        margin-top: 100px;
+        margin-bottom: 90px;
+        overflow: hidden;
+    }
+
+    /* Grid-based layout instead of table */
+    .table-header {
+        display: grid;
+        grid-template-columns: 80px 1fr 80px;
+        background: #f5f5f5;
+        padding: 15px 0;
+        font-weight: 600;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .table-row {
+        display: grid;
+        grid-template-columns: 80px 1fr 80px;
+        padding: 15px 0;
+        border-bottom: 1px solid #eee;
+        align-items: center;
+        position: relative;
+    }
+
+    .table-row:hover {
+        background-color: #f9f9f9;
+    }
+
+    /* Red accent line */
+    .table-row:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 0;
+        background-color: #e10600;
+        transition: width 0.3s ease;
+    }
+
+    .table-row:hover:before {
+        width: 4px;
+    }
+
+    .position, .points {
+        text-align: center;
+    }
+
+    .header-position, .header-points {
+        text-align: center;
+        color: #555;
+    }
+
+    .header-user {
+        text-align: center;  /* Center the User header */
+        color: #555;
+    }
+
+    .user {
+        display: flex;
+        justify-content: center; /* Center the user content */
+        align-items: center;
+        text-align: center;
+    }
+
+    .user-content {
+        display: flex;
+        align-items: center;
+    }
+
+    .car-icon {
+        margin-right: 10px;
+        font-size: 20px;
+    }
+
+    .username {
+        font-weight: 500;
+    }
+
+    /* Animation keyframes */
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+        from { 
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        to { 
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideDown {
+        from { 
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to { 
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Improved animations */
+    .animate-title {
+        opacity: 0;
+        animation: slideDown 0.8s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+    }
+
+    .animate-subtitle {
+        opacity: 0;
+        animation: fadeIn 1s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+        animation-delay: 0.3s;
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 1.2s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+        animation-delay: 0.4s;
+    }
+
+    .animate-podium {
+        opacity: 0;
+        animation: slideUp 0.9s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+    }
+</style>
+{% endblock %} 
