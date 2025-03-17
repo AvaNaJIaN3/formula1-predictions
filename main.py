@@ -10,7 +10,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 # Initialization
 app = Flask(__name__)
-app.config['SECRET_KEY'] = "your_secret_key"
+app.config['SECRET_KEY'] = #SECRET KEY#
 app.config['STATIC_FOLDER'] = 'static'
 app.config['TEMPLATE_FOLDER'] = 'templates'
 
