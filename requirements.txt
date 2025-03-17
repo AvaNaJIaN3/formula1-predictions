@@ -3,3 +3,4 @@ SQLAlchemy~=2.0.25
 Werkzeug~=3.0.0
 WTForms~=3.0.1
 Flask-SQLAlchemy
+Flask-Login
