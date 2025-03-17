@@ -1,10 +1,10 @@
-﻿## Disclaimer 
+﻿## Disclaimer ⚠️:
 - Important!!! I USED ALL THE PHOTOS OF DRIVERS AND TEAMS FROM THE WIKI SITE, WHERE THE PHOTOS WERE FREELY AVAILABLE. ALL IMAGE CREDITS (links to photos) are in CREDITS.txt
 - Important!!! This is an educational project and is not affiliated with Formula 1 or any of its partners. This website is unofficial and is not associated in any way with the Formula 1 companies. F1, FORMULA ONE, FORMULA 1, FIA FORMULA ONE WORLD CHAMPIONSHIP, GRAND PRIX and related marks are trade marks of Formula One Licensing B.V All trademarks are property of their respective owners.
 - (I love F1)
 
 
-## Project Description: 
+## Project Description 🏎️: 
 Hi everyone, this is my first big project that I've been doing for quite a while, because I've been abandoning it for a while because I didn't have enough time, but I wanted to finish this site before the start of the 2025 season. The idea was a smaller project, but it turned out to be several pages long. I wrote the entire backend part myself using Flask + SQLAlchemy (Database), and decided to “test” the frontend part with AI, and Cloud sonnet 3.7 turned out to be the best and most developed - it's a really fantastic machine for creating websites. I made the design in the canvas and received the code from AI.
 The goal of the project was to create a website about the royal races and the ability to place your bets, follow each driver during the season, follow the calendar, and track your own position in the user grid.
 
@@ -51,11 +51,12 @@ Results are added manually using the Restful API. The main arguments are :
 "Score"
 After entering the value, the points of the driver, teams (in case of getting into the top 10) and the user's points if he guessed the place of the driver are automatically updated.
 
-## Technolgoies 🛠
+## Technologies 🛠:
 - Python
 - Flask
 - HTML, CSS, JavaScript
 - SQLAlchemy (+SQLite to browser my DB)
 - AI :D (cloude sonnet 3.7) 
 
+# Final words:
 This is my first project, so there may be a lot of mistakes, but if you have any suggestions, ideas on how to fix it or make it better, write to me!
