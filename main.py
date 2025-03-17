@@ -3,6 +3,7 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Integer, String, ForeignKey, desc
 from flask_login import UserMixin, login_user, current_user, login_required, logout_user, LoginManager
+import os
 
 
 from forms import RegisterForm, UserForm, PredictionForm, ChangeForm
@@ -426,3 +427,5 @@ def change_prediction(id):
 
 if __name__ == "__main__":
     app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
